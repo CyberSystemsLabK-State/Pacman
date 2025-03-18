@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\Pacman.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Pacman.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\PacmanEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\.vsconfig" />
+    <None Include="..\..\UpgradeLog.htm" />
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\Pacman">
+      <UniqueIdentifier>{C6899A6D-702B-3D6E-A7F4-56BF748BB4D9}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Pacman\Pacman.Build.cs">
+      <Filter>Source\Pacman</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\Pacman\Pacman.cpp">
+      <Filter>Source\Pacman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Pacman\Pacman.h">
+      <Filter>Source\Pacman</Filter>
+    </ClCompile>
+    <Filter Include="Source\Pacman\Private">
+      <UniqueIdentifier>{ECCA164B-96FB-3D83-B706-9FA1D931F8CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Pacman\Public">
+      <UniqueIdentifier>{5392D112-5D82-3E12-851D-BBB1E058279F}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Pacman\Public\Test.h">
+      <Filter>Source\Pacman\Public</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\Pacman\Private\Test.cpp">
+      <Filter>Source\Pacman\Public</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
