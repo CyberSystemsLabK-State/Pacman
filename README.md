@@ -5,3 +5,9 @@ The project was compiled for 64-bit versions of Windows.
 ## Dependencies
 The following list were the environment versions used - recommended to treat these as minimum
 - Unreal Engine version 5.5
+## Compilation
+Clone repo to your local machine.
+Open the .uproject file via UnrealEditor version 5.5.
+Open codebase in Visual Studio
+- Open Visual studio through Tools in UnrealEditor
+- Open the .sln file through Visual Studio directly

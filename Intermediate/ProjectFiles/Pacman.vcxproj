@@ -250,6 +250,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\Pacman.uproject" />
+    <None Include="..\..\README.md" />
     <None Include="..\..\Source\Pacman.Target.cs" />
     <None Include="..\..\Source\PacmanEditor.Target.cs" />
     <None Include="..\..\.vsconfig" />

@@ -49,6 +49,7 @@
     <ClCompile Include="..\..\Source\Pacman\Public\Test.h">
       <Filter>Source\Pacman\Public</Filter>
     </ClCompile>
+    <None Include="..\..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\Pacman\Private\Test.cpp">
