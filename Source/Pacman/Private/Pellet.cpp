@@ -19,9 +19,9 @@ APellet::APellet()
 	
 	if (Sphere.Succeeded()) {
 		PelletMesh->SetStaticMesh(Sphere.Object);
-		PelletMesh->SetWorldScale3D(FVector(0.3, 0.3, 0.3));
+		PelletMesh->SetWorldScale3D(FVector(0.7, 0.7, 0.7));
 
-		BaseCollisionComponent->SetSphereRadius(16);
+		BaseCollisionComponent->SetSphereRadius(36);
 	}
 }
 
