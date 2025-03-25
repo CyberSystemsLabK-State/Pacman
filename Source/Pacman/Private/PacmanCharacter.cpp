@@ -29,6 +29,37 @@ void APacmanCharacter::Tick(float DeltaTime)
 void APacmanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	// player movement inputs
+	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APacmanCharacter::MoveYAxis);
+	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APacmanCharacter::MoveXAxis);
+	// player event inputs
+	PlayerInputComponent->BindAction(TEXT("NewGame"), IE_Pressed, this, &APacmanCharacter::NewGame);
+	PlayerInputComponent->BindAction(TEXT("PauseGame"), IE_Pressed, this, &APacmanCharacter::PauseGame);
+	PlayerInputComponent->BindAction(TEXT("RestartGame"), IE_Pressed, this, &APacmanCharacter::RestartGame);
 
 }
 
+void APacmanCharacter::MoveXAxis(float axis_value) {
+	current_velocity.X = axis_value;
+	AddMovementInput(current_velocity);
+	return;
+}
+
+void APacmanCharacter::MoveYAxis(float axis_value) {
+	current_velocity.Y = axis_value;
+	AddMovementInput(current_velocity);
+	return;
+}
+
+void APacmanCharacter::NewGame() {
+	return;
+}
+
+void APacmanCharacter::PauseGame() {
+	return;
+}
+
+void APacmanCharacter::RestartGame() {
+	return;
+}

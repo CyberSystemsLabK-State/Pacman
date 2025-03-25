@@ -15,6 +15,18 @@ public:
 	// Sets default values for this character's properties
 	APacmanCharacter();
 
+private:
+	FVector current_velocity;
+
+	// movement handlers
+	void MoveXAxis(float axis_value);
+	void MoveYAxis(float axis_value);
+
+	// game events
+	void NewGame();
+	void PauseGame();
+	void RestartGame();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
