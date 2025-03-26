@@ -12,8 +12,21 @@ class PACMAN_API APacmanCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+	// why does UE5 put the constructor in a separate modifier indent?
 	// Sets default values for this character's properties
 	APacmanCharacter();
+
+private:
+	FVector current_velocity;
+
+	// movement handlers
+	void MoveXAxis(float axis_value);
+	void MoveYAxis(float axis_value);
+
+	// event handlers
+	void NewGame();
+	void PauseGame();
+	void RestartGame();
 
 protected:
 	// Called when the game starts or when spawned
