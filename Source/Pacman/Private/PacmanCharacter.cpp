@@ -2,6 +2,7 @@
 
 
 #include "PacmanCharacter.h"
+#include "EngineUtils.h"
 
 // Sets default values
 APacmanCharacter::APacmanCharacter()
@@ -18,12 +19,29 @@ void APacmanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	game_mode = Cast<APacmanGameMode>(UGameplayStatics::GetGameMode(this));
+
+	/*
+	* set collision handler
+	* UE4 handles this in a single line, but UE5 needs this to store UCapsuleComponent() in a memory space
+	* only then can we call the next line.
+	*/
+	capsule_component = GetCapsuleComponent();
+	// BUG: C2027 - UCapsuleComponent is an undenfined type
+	// FIX: Including this in .h may fix it??
+	capsule_component->OnComponentBeginOverlap.AddDynamic(this, &APacmanCharacter::OnCollision);
+
+	// find total pellet count in the map
+	// PelletItr is an Intellisense error; free to ignore;
+	for (TActorIterator<APellet> PelletItr(GetWorld()); PelletItr; ++PelletItr) {
+		total_pellets++;
+	}
 }
 
 // Called every frame
 void APacmanCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 
 }
 
@@ -83,5 +101,27 @@ void APacmanCharacter::PauseGame() {
 
 void APacmanCharacter::RestartGame() {
 	GetWorld()->GetFirstPlayerController()->ConsoleCommand(TEXT("RestartLevel"));
+	return;
+}
+
+// coliision handler
+
+void APacmanCharacter::OnCollision
+(AActor* other_actor, UPrimitiveComponent* other_component, int32 other_body_index) {
+	// checks if game is currently running
+	if (game_mode->GetCurrentState() != EGameState::EPlaying) {
+		return;
+	}
+	
+	// BUG: AActor->IsA() returns APellet::StaticClass() as a non-existent class 
+	if (!other_actor->IsA(APellet::StaticClass())) {
+		return;
+	}
+	
+	// checks if pellet to be eaten will trigger win condition
+	if (total_pellets-- == 0) {
+		game_mode->SetCurrentState(EGameState::EWin);
+	}
+	other_actor->Destroy();
 	return;
 }

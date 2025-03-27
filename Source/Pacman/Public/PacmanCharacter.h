@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "PacmanGameMode.h"
+// included for Pacman->Pellet collisions
+#include "Pellet.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "PacmanCharacter.generated.h"
@@ -19,8 +21,13 @@ public:
 	APacmanCharacter();
 
 private:
-	FVector current_velocity;
+	FVector current_velocity;	// vector of pacman velocities
+	FVector start_point;	// pacman start point
 	APacmanGameMode* game_mode;
+	UCapsuleComponent* capsule_component;
+
+	uint8 total_pellets; // no. of pellets for win condition
+	uint8 lives; // total player lives
 
 	// movement handlers
 	void MoveXAxis(float axis_value);
@@ -30,6 +37,9 @@ private:
 	void NewGame();
 	void PauseGame();
 	void RestartGame();
+
+	UFUNCTION()
+	void OnCollision(AActor* other_actor, UPrimitiveComponent* other_component, int32 other_body_index);
 
 protected:
 	// Called when the game starts or when spawned
