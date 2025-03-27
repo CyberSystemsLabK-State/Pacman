@@ -18,6 +18,9 @@ void APacmanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	game_mode = Cast<APacmanGameMode>(UGameplayStatics::GetGameMode(this));
+
+	// set OnCollision() handler
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APacmanCharacter::OnCollision);
 	
 }
 
