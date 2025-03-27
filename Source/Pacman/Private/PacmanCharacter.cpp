@@ -9,12 +9,15 @@ APacmanCharacter::APacmanCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SetActorEnableCollision(true);
+
 }
 
 // Called when the game starts or when spawned
 void APacmanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	game_mode = Cast<APacmanGameMode>(UGameplayStatics::GetGameMode(this));
 	
 }
 
@@ -52,14 +55,26 @@ void APacmanCharacter::MoveYAxis(float axis_value) {
 	return;
 }
 
+//Game event handlers
+
 void APacmanCharacter::NewGame() {
+	if (game_mode->GetCurrentState() == EGameState::EMenu) {
+		game_mode->SetCurrentState(EGameState::EPlaying);
+	}
 	return;
 }
 
 void APacmanCharacter::PauseGame() {
+	if (game_mode->GetCurrentState() == EGameState::EPlaying) {
+		game_mode->SetCurrentState(EGameState::EPause);
+	}
+	else if (game_mode->GetCurrentState() == EGameState::EPause) {
+		game_mode->SetCurrentState(EGameState::EPlaying);
+	}
 	return;
 }
 
 void APacmanCharacter::RestartGame() {
+	GetWorld()->GetFirstPlayerController()->ConsoleCommand(TEXT("RestartLevel"));
 	return;
 }

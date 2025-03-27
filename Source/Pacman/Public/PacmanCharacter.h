@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PacmanGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "PacmanCharacter.generated.h"
 
@@ -17,6 +19,7 @@ public:
 
 private:
 	FVector current_velocity;
+	APacmanGameMode* game_mode;
 
 	// movement handlers
 	void MoveXAxis(float axis_value);
