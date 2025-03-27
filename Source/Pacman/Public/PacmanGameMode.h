@@ -20,8 +20,7 @@ public:
 	EGameState GetCurrentState() const {
 		return game_state.GetGameState();
 	}
-	void SetCurrentState(EGameState state_value) {
-	}
+	void SetCurrentState(EGameState state_value);
 
 private:
 	APacmanGameState game_state;
