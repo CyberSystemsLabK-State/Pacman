@@ -14,6 +14,7 @@ class PACMAN_API APacmanCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+	// why does UE5 put the constructor in a separate modifier indent?
 	// Sets default values for this character's properties
 	APacmanCharacter();
 
