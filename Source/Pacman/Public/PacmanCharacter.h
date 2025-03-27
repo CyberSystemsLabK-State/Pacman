@@ -31,9 +31,6 @@ private:
 	void PauseGame();
 	void RestartGame();
 
-	UFUNCTION()
-	void OnCollision(class AActor* other_actor, class UPrimiviteComponent* other_component, int32 other_body_index);
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

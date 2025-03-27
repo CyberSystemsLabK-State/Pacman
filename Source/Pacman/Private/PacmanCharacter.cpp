@@ -18,10 +18,6 @@ void APacmanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	game_mode = Cast<APacmanGameMode>(UGameplayStatics::GetGameMode(this));
-
-	// set OnCollision() handler
-	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APacmanCharacter::OnCollision);
-	
 }
 
 // Called every frame
@@ -52,18 +48,6 @@ void APacmanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction(TEXT("PauseGame"), IE_Pressed, this, &APacmanCharacter::PauseGame);
 	PlayerInputComponent->BindAction(TEXT("RestartGame"), IE_Pressed, this, &APacmanCharacter::RestartGame);
 
-}
-
-void MoveXAxis(float axis_value) {
-	current_velocity.X = axis_value;
-	AddMovementInput(current_velocity);
-	return;
-}
-
-void MoveYAxis(float axis_value) {
-	current_velocity.Y = axis_value;
-	AddMovementInput(current_velocity);
-	return;
 }
 
 void APacmanCharacter::MoveXAxis(float axis_value) {
