@@ -6,6 +6,7 @@
 #include "PacmanGameMode.h"
 // included for Pacman->Pellet collisions
 #include "Pellet.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "PacmanCharacter.generated.h"
@@ -38,8 +39,10 @@ private:
 	void PauseGame();
 	void RestartGame();
 
+	// BUG: see src commment. Parameters should match (UPrimitiveComponent*, AActor*, UPrimitiveComponent*, 
+	// int32, bool, const FHitResult &)
 	UFUNCTION()
-	void OnCollision(AActor* other_actor, UPrimitiveComponent* other_component, int32 other_body_index);
+	void OnCollision(AActor* other_actor, UPrimitiveComponent* other_component, int32 other_body_index);	
 
 protected:
 	// Called when the game starts or when spawned

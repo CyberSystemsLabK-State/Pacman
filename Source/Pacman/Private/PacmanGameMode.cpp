@@ -5,12 +5,12 @@
 
 APacmanGameMode::APacmanGameMode() {
 
-	//game_state = Cast<APacmanGameState>;
+	game_state = CreateDefaultSubobject<APacmanGameState>(TEXT("game_state"));
 	return;
 }
 
 void APacmanGameMode::SetCurrentState(EGameState state_value) {
-	game_state.SetGameState(state_value);
+	game_state->SetGameState(state_value);
 	return;
 }
 

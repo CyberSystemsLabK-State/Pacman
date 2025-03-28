@@ -18,6 +18,7 @@ APacmanCharacter::APacmanCharacter()
 void APacmanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	game_mode = NewObject<APacmanGameMode>(this, APacmanGameMode::StaticClass());
 	game_mode = Cast<APacmanGameMode>(UGameplayStatics::GetGameMode(this));
 
 	/*
@@ -25,9 +26,14 @@ void APacmanCharacter::BeginPlay()
 	* UE4 handles this in a single line, but UE5 needs this to store UCapsuleComponent() in a memory space
 	* only then can we call the next line.
 	*/
+
+	// BUG: wouldn't ovewriting a pointer cause a memory leak?
+	capsule_component = CreateDefaultSubobject<UCapsuleComponent>(TEXT("capsule_component"));
 	capsule_component = GetCapsuleComponent();
 	// BUG: C2027 - UCapsuleComponent is an undenfined type
 	// FIX: Including this in .h may fix it??
+	
+	// BUG: can't cast delegate function; parameters don't match
 	capsule_component->OnComponentBeginOverlap.AddDynamic(this, &APacmanCharacter::OnCollision);
 
 	// find total pellet count in the map
@@ -53,19 +59,11 @@ void APacmanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	// player movement inputs
 	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APacmanCharacter::MoveYAxis);
 	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APacmanCharacter::MoveXAxis);
+
 	// player event inputs
 	PlayerInputComponent->BindAction(TEXT("NewGame"), IE_Pressed, this, &APacmanCharacter::NewGame);
 	PlayerInputComponent->BindAction(TEXT("PauseGame"), IE_Pressed, this, &APacmanCharacter::PauseGame);
 	PlayerInputComponent->BindAction(TEXT("RestartGame"), IE_Pressed, this, &APacmanCharacter::RestartGame);
-
-	
-	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APacmanCharacter::MoveXAxis);
-	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APacmanCharacter::MoveYAxis);
-
-	PlayerInputComponent->BindAction(TEXT("NewGame"), IE_Pressed, this, &APacmanCharacter::NewGame);
-	PlayerInputComponent->BindAction(TEXT("PauseGame"), IE_Pressed, this, &APacmanCharacter::PauseGame);
-	PlayerInputComponent->BindAction(TEXT("RestartGame"), IE_Pressed, this, &APacmanCharacter::RestartGame);
-
 }
 
 void APacmanCharacter::MoveXAxis(float axis_value) {
@@ -81,7 +79,6 @@ void APacmanCharacter::MoveYAxis(float axis_value) {
 }
 
 //Game event handlers
-
 void APacmanCharacter::NewGame() {
 	if (game_mode->GetCurrentState() == EGameState::EMenu) {
 		game_mode->SetCurrentState(EGameState::EPlaying);

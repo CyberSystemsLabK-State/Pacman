@@ -18,12 +18,13 @@ class PACMAN_API APacmanGameMode : public AGameMode
 public:
 	APacmanGameMode();
 	EGameState GetCurrentState() const {
-		return game_state.GetGameState();
+		return game_state->GetGameState();
 	}
 	void SetCurrentState(EGameState state_value);
 
 private:
-	APacmanGameState game_state;
+	UPROPERTY()
+	APacmanGameState* game_state;
 
 	// BUG: cannot override inherit destructor
 	//virtual ~APacmanGameMode();
