@@ -6,6 +6,7 @@
 #include "PacmanGameMode.h"
 // included for Pacman->Pellet collisions
 #include "Pellet.h"
+#include "AIEnemy.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
@@ -39,10 +40,14 @@ private:
 	void PauseGame();
 	void RestartGame();
 
-	// BUG: see src commment. Parameters should match (UPrimitiveComponent*, AActor*, UPrimitiveComponent*, 
-	// int32, bool, const FHitResult &)
+	// Pacman death handler
+	void Kill();
+
+	// Pacman collision event handler
 	UFUNCTION()
-	void OnCollision(AActor* other_actor, UPrimitiveComponent* other_component, int32 other_body_index);	
+	void OnCollision(UPrimitiveComponent* overlapped_component,
+		AActor* other_actor, UPrimitiveComponent* other_component, int32 other_body_index,
+		bool b_from_sweep, const FHitResult& sweep_result);
 
 protected:
 	// Called when the game starts or when spawned

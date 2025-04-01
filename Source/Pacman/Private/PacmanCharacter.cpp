@@ -18,6 +18,10 @@ APacmanCharacter::APacmanCharacter()
 void APacmanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	lives = 3;
+	start_point = GetActorLocation();
+
 	game_mode = NewObject<APacmanGameMode>(this, APacmanGameMode::StaticClass());
 	game_mode = Cast<APacmanGameMode>(UGameplayStatics::GetGameMode(this));
 
@@ -29,15 +33,14 @@ void APacmanCharacter::BeginPlay()
 
 	// BUG: wouldn't ovewriting a pointer cause a memory leak?
 	capsule_component = CreateDefaultSubobject<UCapsuleComponent>(TEXT("capsule_component"));
-	capsule_component = GetCapsuleComponent();
 	// BUG: C2027 - UCapsuleComponent is an undenfined type
 	// FIX: Including this in .h may fix it??
 	
-	// BUG: can't cast delegate function; parameters don't match
+	// Bind pacman event handler to collsion component overlap
+	// i.e. Pacman overlaps with pellet or ghost
 	capsule_component->OnComponentBeginOverlap.AddDynamic(this, &APacmanCharacter::OnCollision);
 
 	// find total pellet count in the map
-	// PelletItr is an Intellisense error; free to ignore;
 	for (TActorIterator<APellet> PelletItr(GetWorld()); PelletItr; ++PelletItr) {
 		total_pellets++;
 	}
@@ -104,7 +107,9 @@ void APacmanCharacter::RestartGame() {
 // coliision handler
 
 void APacmanCharacter::OnCollision
-(AActor* other_actor, UPrimitiveComponent* other_component, int32 other_body_index) {
+(UPrimitiveComponent* overlapped_component,
+	AActor* other_actor, UPrimitiveComponent* other_component, int32 other_body_index,
+	bool b_from_sweep, const FHitResult& sweep_result) {
 	// checks if game is currently running
 	if (game_mode->GetCurrentState() != EGameState::EPlaying) {
 		return;
@@ -116,9 +121,19 @@ void APacmanCharacter::OnCollision
 	}
 	
 	// checks if pellet to be eaten will trigger win condition
-	if (total_pellets-- == 0) {
+	if (--total_pellets == 0) {
 		game_mode->SetCurrentState(EGameState::EWin);
 	}
 	other_actor->Destroy();
 	return;
+}
+
+// handles pacman death
+void APacmanCharacter::Kill() {
+	if (--lives == 0) {
+		game_mode->SetCurrentState(EGameState::EGameOver);
+	}
+	else {
+		SetActorLocation(start_point);
+	}
 }
