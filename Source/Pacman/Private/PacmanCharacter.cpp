@@ -22,7 +22,7 @@ void APacmanCharacter::BeginPlay()
 	lives = 3;
 	start_point = GetActorLocation();
 
-	game_mode = NewObject<APacmanGameMode>(this, APacmanGameMode::StaticClass());
+	// Cast AGameMode to APacmanMode (type conversion)
 	game_mode = Cast<APacmanGameMode>(UGameplayStatics::GetGameMode(this));
 
 	/*
@@ -31,10 +31,8 @@ void APacmanCharacter::BeginPlay()
 	* only then can we call the next line.
 	*/
 
-	// BUG: wouldn't ovewriting a pointer cause a memory leak?
-	capsule_component = CreateDefaultSubobject<UCapsuleComponent>(TEXT("capsule_component"));
-	// BUG: C2027 - UCapsuleComponent is an undenfined type
-	// FIX: Including this in .h may fix it??
+	// initialise UCapsuleComponent
+	capsule_component = NewObject<UCapsuleComponent>(this, UCapsuleComponent::StaticClass());
 	
 	// Bind pacman event handler to collsion component overlap
 	// i.e. Pacman overlaps with pellet or ghost
