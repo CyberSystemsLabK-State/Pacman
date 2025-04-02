@@ -14,19 +14,19 @@ UCLASS()
 class PACMAN_API APacmanGameMode : public AGameMode
 {
 	GENERATED_BODY()
-
-public:
-	APacmanGameMode();
-	EGameState GetCurrentState() const {
-		return game_state->GetGameState();
-	}
-	void SetCurrentState(EGameState state_value);
-
 private:
 	UPROPERTY()
 	APacmanGameState* game_state;
 
-	// BUG: cannot override inherit destructor
-	//virtual ~APacmanGameMode();
-	
+protected:
+	virtual void StartPlay() override;
+
+public:
+	// Constructor
+	APacmanGameMode();
+	//Default destructor
+	virtual ~APacmanGameMode() = default; 
+
+	EGameState GetCurrentState() const;
+	void SetCurrentState(EGameState state_value);
 };

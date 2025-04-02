@@ -6,7 +6,6 @@
 #include "PacmanGameMode.h"
 // included for Pacman->Pellet collisions
 #include "Pellet.h"
-#include "AIEnemy.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
