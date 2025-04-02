@@ -3,7 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EngineUtils.h"
 #include "PacmanGameState.h"
+#include "Pellet.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/GameMode.h"
 #include "PacmanGameMode.generated.h"
 
@@ -17,6 +20,7 @@ class PACMAN_API APacmanGameMode : public AGameMode
 private:
 	UPROPERTY()
 	APacmanGameState* game_state;
+	uint8 pellet_count;
 
 protected:
 	virtual void StartPlay() override;
@@ -29,4 +33,6 @@ public:
 
 	EGameState GetCurrentState() const;
 	void SetCurrentState(EGameState state_value);
+
+	uint8 GetPelletCount();
 };

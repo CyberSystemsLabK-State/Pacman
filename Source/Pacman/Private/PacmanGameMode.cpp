@@ -23,10 +23,31 @@ void APacmanGameMode::SetCurrentState(EGameState state_value) {
 }
 
 void APacmanGameMode::StartPlay() {
+	// gets active pellet count
+	// will count anything using or inheriting AActor, including non-pellet actors
+	// BUG: returns 0; need
+	pellet_count = (uint8_t)(GetWorld()->GetActorCount());
+
+	for (TActorIterator<APellet> PelletItr(GetWorld()); PelletItr; ++PelletItr) {
+		pellet_count++;
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, GetWorld()->GetDebugDisplayName());
+
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("PacmanGameMode: StartPlay called."));
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(
 		TEXT("PacmanGameMode: Current state - %f."), GetCurrentState()));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(
+		TEXT("PacmanGameMode: %f pellets spawned."), pellet_count));
+
 
 	Super::StartPlay();
+
+	
+}
+
+uint8 APacmanGameMode::GetPelletCount() {
+	return pellet_count;
+	
 }
 
