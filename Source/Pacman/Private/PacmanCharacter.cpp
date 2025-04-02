@@ -17,8 +17,6 @@ APacmanCharacter::APacmanCharacter()
 // Called when the game starts or when spawned
 void APacmanCharacter::BeginPlay()
 {
-	Super::BeginPlay();
-
 	lives = 3;
 	start_point = GetActorLocation();
 
@@ -42,6 +40,11 @@ void APacmanCharacter::BeginPlay()
 	for (TActorIterator<APellet> PelletItr(GetWorld()); PelletItr; ++PelletItr) {
 		total_pellets++;
 	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("PacmanCharacter: Pacman Character Spawned."));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("PacmanCharacter: %f Pellets spawned."), total_pellets));
+
+	Super::BeginPlay();
 }
 
 // Called every frame
