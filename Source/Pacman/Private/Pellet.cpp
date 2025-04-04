@@ -25,7 +25,6 @@ APellet::APellet()
 	}
 }
 
-/*
 // Called when the game starts or when spawned
 void APellet::BeginPlay()
 {
@@ -33,6 +32,7 @@ void APellet::BeginPlay()
 	
 }
 
+/*
 // Called every frame
 void APellet::Tick(float DeltaTime)
 {
