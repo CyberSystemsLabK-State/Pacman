@@ -7,6 +7,9 @@ APacmanGameMode::APacmanGameMode() {
 	
 	// Sets GameMode to use custom GameState; otherwise defaults to GameStateBase
 	GameStateClass = APacmanGameState::StaticClass();
+	DefaultPawnClass = APacmanCharacter::StaticClass();
+	PlayerControllerClass = APacmanPlayerController::StaticClass();
+	pellet_count = 0;
 
 	game_state = CreateDefaultSubobject<APacmanGameState>(TEXT("game_state"));
 	return;
@@ -23,28 +26,28 @@ void APacmanGameMode::SetCurrentState(EGameState state_value) {
 }
 
 void APacmanGameMode::StartPlay() {
+	Super::StartPlay();
 	// gets active pellet count
 	// will count anything using or inheriting AActor, including non-pellet actors
-	// BUG: returns 0; need
-	pellet_count = (uint8_t)(GetWorld()->GetActorCount());
+	// BUG: returns 0; needs
 
 	for (TActorIterator<APellet> PelletItr(GetWorld()); PelletItr; ++PelletItr) {
 		pellet_count++;
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, GetWorld()->GetDebugDisplayName());
-
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("PacmanGameMode: StartPlay called."));
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(
 		TEXT("PacmanGameMode: Current state - %f."), GetCurrentState()));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(
-		TEXT("PacmanGameMode: %f pellets spawned."), pellet_count));
 
-
-	Super::StartPlay();
-
-	
+	if (pellet_count > 0) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("pellet instances found."));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("no pellet instances found."));
+	}
 }
+
 
 uint8 APacmanGameMode::GetPelletCount() {
 	return pellet_count;

@@ -9,19 +9,19 @@ APacmanCharacter::APacmanCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 	SetActorEnableCollision(true);
+
+	// initialise UCapsuleComponent
+	capsule_component = CreateDefaultSubobject<UCapsuleComponent>(TEXT("capsule_component"));
 
 }
 
 // Called when the game starts or when spawned
-void APacmanCharacter::BeginPlay()
-{
+void APacmanCharacter::BeginPlay() {
+	Super::BeginPlay();
+
 	lives = 3;
 	start_point = GetActorLocation();
-
-	// Cast AGameMode to APacmanMode (type conversion)
-	game_mode = Cast<APacmanGameMode>(UGameplayStatics::GetGameMode(this));
 
 	/*
 	* set collision handler
@@ -29,35 +29,21 @@ void APacmanCharacter::BeginPlay()
 	* only then can we call the next line.
 	*/
 
-	// initialise UCapsuleComponent
-	capsule_component = NewObject<UCapsuleComponent>(this, UCapsuleComponent::StaticClass());
-	
 	// Bind pacman event handler to collsion component overlap
 	// i.e. Pacman overlaps with pellet or ghost
 	capsule_component->OnComponentBeginOverlap.AddDynamic(this, &APacmanCharacter::OnCollision);
 
 	// find total pellet count in the map
-	for (TActorIterator<APellet> PelletItr(GetWorld()); PelletItr; ++PelletItr) {
-		total_pellets++;
-	}
-
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("PacmanCharacter: Pacman Character Spawned."));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("PacmanCharacter: %f Pellets spawned."), total_pellets));
-
-	Super::BeginPlay();
 }
 
 // Called every frame
-void APacmanCharacter::Tick(float DeltaTime)
-{
+void APacmanCharacter::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-	
-
 }
 
 // Called to bind functionality to input
-void APacmanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
+void APacmanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
 	// player movement inputs
@@ -84,19 +70,19 @@ void APacmanCharacter::MoveYAxis(float axis_value) {
 
 //Game event handlers
 void APacmanCharacter::NewGame() {
-	if (game_mode->GetCurrentState() == EGameState::EMenu) {
+	/*if (game_mode->GetCurrentState() == EGameState::EMenu) {
 		game_mode->SetCurrentState(EGameState::EPlaying);
-	}
+	}*/
 	return;
 }
 
 void APacmanCharacter::PauseGame() {
-	if (game_mode->GetCurrentState() == EGameState::EPlaying) {
+	/*if (game_mode->GetCurrentState() == EGameState::EPlaying) {
 		game_mode->SetCurrentState(EGameState::EPause);
 	}
 	else if (game_mode->GetCurrentState() == EGameState::EPause) {
 		game_mode->SetCurrentState(EGameState::EPlaying);
-	}
+	}*/
 	return;
 }
 
@@ -111,30 +97,30 @@ void APacmanCharacter::OnCollision
 (UPrimitiveComponent* overlapped_component,
 	AActor* other_actor, UPrimitiveComponent* other_component, int32 other_body_index,
 	bool b_from_sweep, const FHitResult& sweep_result) {
-	// checks if game is currently running
-	if (game_mode->GetCurrentState() != EGameState::EPlaying) {
-		return;
-	}
-	
-	// BUG: AActor->IsA() returns APellet::StaticClass() as a non-existent class 
-	if (!other_actor->IsA(APellet::StaticClass())) {
-		return;
-	}
-	
-	// checks if pellet to be eaten will trigger win condition
-	if (--total_pellets == 0) {
-		game_mode->SetCurrentState(EGameState::EWin);
-	}
-	other_actor->Destroy();
-	return;
+	//// checks if game is currently running
+	//if (game_mode->GetCurrentState() != EGameState::EPlaying) {
+	//	return;
+	//}
+	//
+	//// BUG: AActor->IsA() returns APellet::StaticClass() as a non-existent class 
+	//if (!other_actor->IsA(APellet::StaticClass())) {
+	//	return;
+	//}
+	//
+	//// checks if pellet to be eaten will trigger win condition
+	//if (--total_pellets == 0) {
+	//	game_mode->SetCurrentState(EGameState::EWin);
+	//}
+	//other_actor->Destroy();
+	//return;
 }
 
 // handles pacman death
 void APacmanCharacter::Kill() {
-	if (--lives == 0) {
+	/*if (--lives == 0) {
 		game_mode->SetCurrentState(EGameState::EGameOver);
 	}
 	else {
 		SetActorLocation(start_point);
-	}
+	}*/
 }

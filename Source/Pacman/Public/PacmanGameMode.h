@@ -4,10 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "EngineUtils.h"
-#include "PacmanGameState.h"
-#include "Pellet.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/GameMode.h"
+#include "TimerManager.h"
+
+#include "PacmanPlayerController.h""
+#include "PacmanCharacter.h"
+#include "PacmanGameState.h"
+#include "Pellet.h"
+
 #include "PacmanGameMode.generated.h"
 
 /**
@@ -20,7 +25,7 @@ class PACMAN_API APacmanGameMode : public AGameMode
 private:
 	UPROPERTY()
 	APacmanGameState* game_state;
-	uint8 pellet_count;
+	int pellet_count;
 
 protected:
 	virtual void StartPlay() override;
