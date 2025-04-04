@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
+#include "Camera/CameraComponent.h"
 // included for Pacman->Pellet collisions
 #include "Pellet.h"
 #include "PacmanCharacter.generated.h"
@@ -24,7 +25,8 @@ private:
 	FVector current_velocity;	// vector of pacman velocities
 	FVector start_point;	// pacman start point
 	UCapsuleComponent* capsule_component;
-	UStaticMeshComponent* pacman_mesh;
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* player_camera;
 
 	uint8 total_pellets; // no. of pellets for win condition
 	uint8 lives; // total player lives

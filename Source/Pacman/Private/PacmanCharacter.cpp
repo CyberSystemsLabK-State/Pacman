@@ -13,11 +13,19 @@ APacmanCharacter::APacmanCharacter()
 
 	// initialise UCapsuleComponent
 	capsule_component = CreateDefaultSubobject<UCapsuleComponent>(TEXT("capsule_component"));
+	player_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("player_camera"));
+	player_camera->SetupAttachment(RootComponent);
 
 }
 
 // Called when the game starts or when spawned
 void APacmanCharacter::BeginPlay() {
+
+	if (GetWorld()->GetFirstPlayerController() != NULL) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("PlayerController exists."));
+		GetWorld()->GetFirstPlayerController()->Possess(this);
+	}
+
 	Super::BeginPlay();
 
 	lives = 3;
