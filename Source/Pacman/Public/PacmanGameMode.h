@@ -8,7 +8,7 @@
 #include "GameFramework/GameMode.h"
 #include "TimerManager.h"
 
-#include "PacmanPlayerController.h""
+#include "PacmanPlayerController.h"
 #include "PacmanCharacter.h"
 #include "PacmanGameState.h"
 #include "Pellet.h"
@@ -25,6 +25,8 @@ class PACMAN_API APacmanGameMode : public AGameMode
 private:
 	UPROPERTY()
 	APacmanGameState* game_state;
+	APacmanPlayerController* player_controller;
+	APacmanCharacter* player_char;
 	int pellet_count;
 
 protected:

@@ -24,7 +24,10 @@ public:
 private:
 	FVector current_velocity;	// vector of pacman velocities
 	FVector start_point;	// pacman start point
+	UPROPERTY(EditDefaultsOnly)
 	UCapsuleComponent* capsule_component;
+	UPROPERTY(EditDefaultsOnly)
+	UStaticMeshComponent* mesh_component;
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* player_camera;
 
@@ -34,6 +37,12 @@ private:
 	// movement handlers
 	void MoveXAxis(float axis_value);
 	void MoveYAxis(float axis_value);
+
+	// rotation handlers
+	void FaceNorth();
+	void FaceSouth();
+	void FaceEast();
+	void FaceWest();
 
 	// game events
 	void NewGame();

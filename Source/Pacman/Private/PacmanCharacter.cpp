@@ -13,18 +13,25 @@ APacmanCharacter::APacmanCharacter()
 
 	// initialise UCapsuleComponent
 	capsule_component = CreateDefaultSubobject<UCapsuleComponent>(TEXT("capsule_component"));
+	capsule_component->SetupAttachment(RootComponent);
+	// static mesh for rendered model
+	mesh_component = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("mesh_component"));
+	mesh_component->SetupAttachment(RootComponent);
+	// test component to check if Pacman functionality works
+	// to be removed and changed to top-down PoV
 	player_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("player_camera"));
 	player_camera->SetupAttachment(RootComponent);
-
 }
 
 // Called when the game starts or when spawned
 void APacmanCharacter::BeginPlay() {
 
+	/*
 	if (GetWorld()->GetFirstPlayerController() != NULL) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("PlayerController exists."));
 		GetWorld()->GetFirstPlayerController()->Possess(this);
 	}
+	*/
 
 	Super::BeginPlay();
 
@@ -58,12 +65,19 @@ void APacmanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APacmanCharacter::MoveYAxis);
 	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APacmanCharacter::MoveXAxis);
 
+	// player rotation inputs
+	PlayerInputComponent->BindAction(TEXT("FaceNorth"), IE_Pressed, this, &APacmanCharacter::FaceNorth);
+	PlayerInputComponent->BindAction(TEXT("FaceSouth"), IE_Pressed, this, &APacmanCharacter::FaceSouth);
+	PlayerInputComponent->BindAction(TEXT("FaceEast"), IE_Pressed, this, &APacmanCharacter::FaceEast);
+	PlayerInputComponent->BindAction(TEXT("FaceWest"), IE_Pressed, this, &APacmanCharacter::FaceWest);
+
 	// player event inputs
 	PlayerInputComponent->BindAction(TEXT("NewGame"), IE_Pressed, this, &APacmanCharacter::NewGame);
 	PlayerInputComponent->BindAction(TEXT("PauseGame"), IE_Pressed, this, &APacmanCharacter::PauseGame);
 	PlayerInputComponent->BindAction(TEXT("RestartGame"), IE_Pressed, this, &APacmanCharacter::RestartGame);
 }
 
+// FIX: constant velocity applied until a wall is hit.
 void APacmanCharacter::MoveXAxis(float axis_value) {
 	current_velocity.X = axis_value;
 	AddMovementInput(current_velocity);
@@ -75,6 +89,30 @@ void APacmanCharacter::MoveYAxis(float axis_value) {
 	AddMovementInput(current_velocity);
 	return;
 }
+
+// input handlers to rotate pacman model in current direction
+// test handlers; remember to fix
+// Works fine as is; *could* be refactored to one method but would end up being complex
+void APacmanCharacter::FaceNorth() {
+	SetActorRotation(FRotator(0.f, 0.f, 0.f));
+	mesh_component->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
+}
+
+void APacmanCharacter::FaceSouth() {
+	SetActorRotation(FRotator(0.f, 180.f, 0.f));
+	mesh_component->SetRelativeRotation(FRotator(0.f, 180.f, 0.f));
+}
+
+void APacmanCharacter::FaceEast() {
+	SetActorRotation(FRotator(0.f, 90.f, 0.f));
+	mesh_component->SetRelativeRotation(FRotator(0.f, 90.f, 0.f));
+}
+
+void APacmanCharacter::FaceWest() {
+	SetActorRotation(FRotator(0.f, 270.f, 0.f));
+	mesh_component->SetRelativeRotation(FRotator(0.f, 270.f, 0.f));
+}
+
 
 //Game event handlers
 void APacmanCharacter::NewGame() {
@@ -111,16 +149,16 @@ void APacmanCharacter::OnCollision
 	//}
 	//
 	//// BUG: AActor->IsA() returns APellet::StaticClass() as a non-existent class 
-	//if (!other_actor->IsA(APellet::StaticClass())) {
-	//	return;
-	//}
-	//
+	if (!other_actor->IsA(APellet::StaticClass())) {
+		return;
+	}
+	
 	//// checks if pellet to be eaten will trigger win condition
 	//if (--total_pellets == 0) {
 	//	game_mode->SetCurrentState(EGameState::EWin);
 	//}
-	//other_actor->Destroy();
-	//return;
+	other_actor->Destroy();
+	return;
 }
 
 // handles pacman death

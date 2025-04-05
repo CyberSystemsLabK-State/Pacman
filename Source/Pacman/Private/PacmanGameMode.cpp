@@ -26,10 +26,29 @@ void APacmanGameMode::SetCurrentState(EGameState state_value) {
 }
 
 void APacmanGameMode::StartPlay() {
-	Super::StartPlay();
 	// gets active pellet count
 	// will count anything using or inheriting AActor, including non-pellet actors
 	// BUG: returns 0; needs
+
+	// checks for existing default class instances;
+
+	FActorSpawnParameters pacman_params;
+	pacman_params.Owner = this;
+
+	player_controller = Cast<APacmanPlayerController>(GetWorld()->GetFirstPlayerController());
+	player_char = Cast<APacmanCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), APacmanCharacter::StaticClass()));
+	if (player_char) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Existing Pacman instance found."));
+	}
+	else {
+		// memory leak. yikes.
+		FActorSpawnParameters params;
+		params.Owner = this;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("No existing Pacman instance found."));
+		player_char = GetWorld()->SpawnActor<APacmanCharacter>
+			(APacmanCharacter::StaticClass(), FVector(-3180.f, 3500.f, 138.f), FRotator(0.f, 0.f, 0.f), params);
+	}
+	player_controller->Possess(player_char);
 
 	for (TActorIterator<APellet> PelletItr(GetWorld()); PelletItr; ++PelletItr) {
 		pellet_count++;
@@ -46,6 +65,8 @@ void APacmanGameMode::StartPlay() {
 	else {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("no pellet instances found."));
 	}
+
+	Super::StartPlay();
 }
 
 
