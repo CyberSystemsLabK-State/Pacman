@@ -34,9 +34,13 @@ private:
 	uint8 total_pellets; // no. of pellets for win condition
 	uint8 lives; // total player lives
 
-	// movement handlers
+	// player movement handlers
 	void MoveXAxis(float axis_value);
 	void MoveYAxis(float axis_value);
+
+	// camera movement handlers
+	void PanXAxis(float axis_value);
+	void PanYAxis(float axis_value);
 
 	// rotation handlers
 	void FaceNorth();

@@ -65,6 +65,10 @@ void APacmanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APacmanCharacter::MoveYAxis);
 	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APacmanCharacter::MoveXAxis);
 
+	// camera movement inputs
+	PlayerInputComponent->BindAxis(TEXT("PanX"), this, &APacmanCharacter::PanXAxis);
+	PlayerInputComponent->BindAxis(TEXT("PanY"), this, &APacmanCharacter::PanYAxis);
+
 	// player rotation inputs
 	PlayerInputComponent->BindAction(TEXT("FaceNorth"), IE_Pressed, this, &APacmanCharacter::FaceNorth);
 	PlayerInputComponent->BindAction(TEXT("FaceSouth"), IE_Pressed, this, &APacmanCharacter::FaceSouth);
@@ -87,6 +91,16 @@ void APacmanCharacter::MoveXAxis(float axis_value) {
 void APacmanCharacter::MoveYAxis(float axis_value) {
 	current_velocity.Y = axis_value;
 	AddMovementInput(current_velocity);
+	return;
+}
+
+void APacmanCharacter::PanXAxis(float axis_value) {
+	AddControllerPitchInput(axis_value);
+	return;
+}
+
+void APacmanCharacter::PanYAxis(float axis_value) {
+	AddControllerYawInput(axis_value);
 	return;
 }
 
