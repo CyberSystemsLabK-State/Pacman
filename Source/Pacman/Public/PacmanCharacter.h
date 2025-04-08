@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 // included for Pacman->Pellet collisions
 #include "Pellet.h"
@@ -24,10 +25,13 @@ public:
 private:
 	FVector current_velocity;	// vector of pacman velocities
 	FVector start_point;	// pacman start point
+	
 	UPROPERTY(EditDefaultsOnly)
 	UCapsuleComponent* capsule_component;
 	UPROPERTY(EditDefaultsOnly)
 	UStaticMeshComponent* mesh_component;
+	UPROPERTY(EditDefaultsOnly)
+	USpringArmComponent* spring_arm;
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* player_camera;
 
