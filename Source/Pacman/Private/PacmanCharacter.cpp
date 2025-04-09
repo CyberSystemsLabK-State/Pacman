@@ -17,10 +17,12 @@ APacmanCharacter::APacmanCharacter()
 	// static mesh for rendered model
 	mesh_component = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("mesh_component"));
 	mesh_component->SetupAttachment(RootComponent);
-	// test component to check if Pacman functionality works
-	// to be removed and changed to top-down PoV
+
+	//Spring arm comp
+	spring_arm = CreateDefaultSubobject<USpringArmComponent>(TEXT("spring_arm"));
+	spring_arm->SetupAttachment(RootComponent);
 	player_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("player_camera"));
-	player_camera->SetupAttachment(RootComponent);
+	player_camera->SetupAttachment(spring_arm);
 }
 
 // Called when the game starts or when spawned
@@ -43,6 +45,8 @@ void APacmanCharacter::BeginPlay() {
 	* UE4 handles this in a single line, but UE5 needs this to store UCapsuleComponent() in a memory space
 	* only then can we call the next line.
 	*/
+
+	spring_arm->bEnableCameraLag = true;
 
 	// Bind pacman event handler to collsion component overlap
 	// i.e. Pacman overlaps with pellet or ghost
@@ -95,12 +99,12 @@ void APacmanCharacter::MoveYAxis(float axis_value) {
 }
 
 void APacmanCharacter::PanXAxis(float axis_value) {
-	AddControllerPitchInput(axis_value);
+	spring_arm->AddRelativeRotation(FRotator(0.f, axis_value, 0.f));
 	return;
 }
 
 void APacmanCharacter::PanYAxis(float axis_value) {
-	AddControllerYawInput(axis_value);
+	spring_arm->AddRelativeRotation(FRotator(axis_value, 0.f, 0.f));
 	return;
 }
 
