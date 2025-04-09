@@ -21,32 +21,34 @@ APacmanCharacter::APacmanCharacter()
 	//Spring arm comp
 	spring_arm = CreateDefaultSubobject<USpringArmComponent>(TEXT("spring_arm"));
 	spring_arm->SetupAttachment(RootComponent);
+	// camera component
 	player_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("player_camera"));
 	player_camera->SetupAttachment(spring_arm);
 }
 
 // Called when the game starts or when spawned
 void APacmanCharacter::BeginPlay() {
-
-	/*
-	if (GetWorld()->GetFirstPlayerController() != NULL) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("PlayerController exists."));
-		GetWorld()->GetFirstPlayerController()->Possess(this);
-	}
-	*/
-
 	Super::BeginPlay();
 
 	lives = 3;
 	start_point = GetActorLocation();
 
+	// smoother movement as camera orbits/follows Pacman
+	spring_arm->bEnableCameraLag = true;
+
+	/*
+	*  Collision is handled by static mesh
+	*  skeletal mesh is unused and I cba to get rid of it....
+	*  so I just made it smaller than capsule :/
+	*/
+	capsule_component->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+	mesh_component->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+	
 	/*
 	* set collision handler
 	* UE4 handles this in a single line, but UE5 needs this to store UCapsuleComponent() in a memory space
 	* only then can we call the next line.
 	*/
-
-	spring_arm->bEnableCameraLag = true;
 
 	// Bind pacman event handler to collsion component overlap
 	// i.e. Pacman overlaps with pellet or ghost
@@ -87,14 +89,16 @@ void APacmanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 // FIX: constant velocity applied until a wall is hit.
 void APacmanCharacter::MoveXAxis(float axis_value) {
-	current_velocity.X = axis_value;
-	AddMovementInput(current_velocity);
+	// converts camera's rotation to FVector relative to XY plane - in-depth definition in documentation
+	// GetScaledAxis converts matrix for relevant axis
+	current_velocity = FRotationMatrix(player_camera->GetComponentRotation()).GetScaledAxis(EAxis::X);
+	AddMovementInput(current_velocity, axis_value);
 	return;
 }
 
 void APacmanCharacter::MoveYAxis(float axis_value) {
-	current_velocity.Y = axis_value;
-	AddMovementInput(current_velocity);
+	current_velocity = FRotationMatrix(player_camera->GetComponentRotation()).GetScaledAxis(EAxis::Y);
+	AddMovementInput(current_velocity, axis_value);
 	return;
 }
 
