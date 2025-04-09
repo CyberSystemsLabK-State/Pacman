@@ -19,9 +19,6 @@ APellet::APellet()
 	
 	if (Sphere.Succeeded()) {
 		PelletMesh->SetStaticMesh(Sphere.Object);
-		PelletMesh->SetWorldScale3D(FVector(0.7, 0.7, 0.7));
-
-		BaseCollisionComponent->SetSphereRadius(36);
 	}
 }
 
@@ -29,6 +26,15 @@ APellet::APellet()
 void APellet::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (isBluePill == true) {
+		PelletMesh->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+		BaseCollisionComponent->SetSphereRadius(50);
+	}
+	else {
+		PelletMesh->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
+		BaseCollisionComponent->SetSphereRadius(25);
+	}
 	
 }
 
