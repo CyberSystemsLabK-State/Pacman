@@ -68,8 +68,8 @@ void APacmanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
 	// player movement inputs
-	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APacmanCharacter::MoveYAxis);
-	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APacmanCharacter::MoveXAxis);
+	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &APacmanCharacter::MoveXAxis);
+	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &APacmanCharacter::MoveYAxis);
 
 	// camera movement inputs
 	PlayerInputComponent->BindAxis(TEXT("PanX"), this, &APacmanCharacter::PanXAxis);
